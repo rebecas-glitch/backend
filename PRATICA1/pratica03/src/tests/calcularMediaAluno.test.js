@@ -1,5 +1,6 @@
 const { calcularMediaAluno } = require('../src/calcularMediaAluno');
-const { calcularMediaAluno } = require('./calcularMediaAluno');
+
+
 
 describe('calcularMediaAluno', () => {
   test('lança erro se a1 ou a2 são undefined', () => {
