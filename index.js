@@ -1,29 +1,30 @@
-require('dotenv').config();
-const express = require('express');
-const mongoose = require('mongoose');
-const morgan = require('morgan');
-const cors = require('cors');
+const express = require("express");
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+const usuariosRouter = require("./routes/usuariosRouter");
+const produtosRouter = require("./routes/produtosRouter");
+
+dotenv.config();
 
 const app = express();
+app.use(express.json());
+
 const PORT = process.env.PORT || 3000;
 
-app.use(cors());
-app.use(express.json());
-app.use(morgan('dev'));
+const mongoURI = `mongodb+srv://${process.env.MONGODB_USER}:${encodeURIComponent(process.env.MONGODB_PASSWORD)}@${process.env.MONGODB_HOST}/${process.env.MONGODB_DATABASE}?retryWrites=true&w=majority`;
 
-app.get('/', (req, res) => {
-  res.send('API funcionando!');
+mongoose.connect(mongoURI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
+.then(() => console.log("Conectado ao MongoDB"))
+.catch(err => console.log("Erro ao conectar ao MongoDB:", err));
+
+app.use("/usuarios", usuariosRouter);
+app.use("/produtos", produtosRouter);
+
+app.listen(PORT, () => {
+  console.log(`Servidor rodando na porta ${PORT}`);
 });
 
-const uri = `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_HOST}/${process.env.MONGODB_DATABASE}?retryWrites=true&w=majority`;
-
-mongoose.connect(uri)
-  .then(() => {
-    console.log('MongoDB conectado com sucesso!');
-    app.listen(PORT, () => {
-      console.log(`Servidor rodando na porta ${PORT}`);
-    });
-  })
-  .catch(err => {
-    console.error('Erro ao conectar ao MongoDB:', err);
-  });
+module.exports = app;
