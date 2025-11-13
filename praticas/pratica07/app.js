@@ -1,28 +1,20 @@
+var express = require('express');
+var path = require('path');
+var cookieParser = require('cookie-parser');
+var logger = require('morgan');
 
-require('dotenv').config();
-const express = require('express');
-const mongoose = require('mongoose');
-const produtosRouter = require('./routes/produtosRouter');
+var indexRouter = require('./routes/index');
+var usersRouter = require('./routes/users');
 
-const app = express();
+var app = express();
 
+app.use(logger('dev'));
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
 
-mongoose.connect(
-  `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_HOST}/${process.env.MONGODB_DATABASE}`
-)
-.then(() => console.log('Conectado ao MongoDB'))
-.catch(err => console.error('Erro ao conectar ao MongoDB:', err));
-
-app.use('/produtos', produtosRouter);
-
-app.use((req, res, next) => {
-  res.status(404).json({ msg: 'Rota não encontrada' });
-});
-
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ msg: 'Erro interno do servidor' });
-});
+app.use('/', indexRouter);
+app.use('/users', usersRouter);
 
 module.exports = app;
