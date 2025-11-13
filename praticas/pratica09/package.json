@@ -1,0 +1,27 @@
+{
+  "name": "pratica09",
+  "version": "1.0.0",
+  "description": "API REST com Express e documentação Swagger - Prática 09",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon app.js",
+    "start": "node app.js"
+  },
+  "keywords": [
+    "express",
+    "swagger",
+    "api",
+    "documentacao"
+  ],
+  "author": "Rebeca Vitória Salazar da Silva",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.1",
+    "swagger-ui-express": "^5.0.1",
+    "yamljs": "^0.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
